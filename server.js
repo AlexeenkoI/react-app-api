@@ -1,9 +1,10 @@
-const server = require('express')();
+const express = require('express');
 const jsonParser = require('body-parser');
 const apiurls = require('./etc/config');
-var cors = require('cors');
+const path = require('path');
+const cors = require('cors');
 
-
+const server = express();
 
 const port = 8000;
 
@@ -13,6 +14,8 @@ server.use(jsonParser.urlencoded({ extended: false })); /// x-form-url-encoded
 ///////////////////////////
 // enable cors policy for local api calls test from browser
 server.use(cors());
+//enable public folder
+server.use("/public_data", express.static(path.join(__dirname, 'public')));
 ///////////////
 const loginRouter = require('./routes/login');
 const sliderRouter = require('./routes/slider');
@@ -35,7 +38,7 @@ server.listen(port,()=>{
 //server.post(apiurls.login,router);
 server.use('/apiv1/admin/',loginRouter);
 server.use('/apiv1/admin/',sliderRouter);
-server.use('apiv1/admin/',servicesRouter);
+server.use('/apiv1/admin/',servicesRouter);
 
 server.post(apiurls.basicUrl,function(req,res){
 	//console.log(req.body.data);
